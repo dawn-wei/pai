@@ -27,42 +27,42 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import 'whatwg-fetch';
 
-import React, {useState, useCallback, useEffect, useMemo} from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   Fabric,
   Stack,
   initializeIcons,
   StackItem,
 } from 'office-ui-fabric-react';
-import {isNil, isEmpty, get} from 'lodash';
+import { isNil, isEmpty, get } from 'lodash';
 import PropTypes from 'prop-types';
 
-import {JobInformation} from './components/job-information';
-import {getFormClassNames} from './components/form-style';
-import {SubmissionSection} from './components/submission-section';
-import {TaskRoles} from './components/task-roles';
+import { JobInformation } from './components/job-information';
+import { getFormClassNames } from './components/form-style';
+import { SubmissionSection } from './components/submission-section';
+import { TaskRoles } from './components/task-roles';
 import Context from './components/context';
-import {fetchJobConfig, listUserVirtualClusters} from './utils/conn';
-import {TaskRolesManager} from './utils/task-roles-manager';
-import {initTheme} from '../components/theme';
+import { fetchJobConfig, listUserVirtualClusters } from './utils/conn';
+import { TaskRolesManager } from './utils/task-roles-manager';
+import { initTheme } from '../components/theme';
 
 // sidebar
-import {Parameters} from './components/sidebar/parameters';
-import {Secrets} from './components/sidebar/secrets';
-import {EnvVar} from './components/sidebar/env-var';
-import {DataComponent} from './components/data/data-component';
-import {ToolComponent} from './components/tools/tool-component';
+import { Parameters } from './components/sidebar/parameters';
+import { Secrets } from './components/sidebar/secrets';
+import { EnvVar } from './components/sidebar/env-var';
+import { DataComponent } from './components/data/data-component';
+import { ToolComponent } from './components/tools/tool-component';
 // models
-import {Topbar} from './components/topbar/topbar';
-import {JobBasicInfo} from './models/job-basic-info';
-import {JobTaskRole} from './models/job-task-role';
-import {JobData} from './models/data/job-data';
-import {JobProtocol} from './models/job-protocol';
+import { Topbar } from './components/topbar/topbar';
+import { JobBasicInfo } from './models/job-basic-info';
+import { JobTaskRole } from './models/job-task-role';
+import { JobData } from './models/data/job-data';
+import { JobProtocol } from './models/job-protocol';
 import {
   getJobComponentsFromConfig,
   isValidUpdatedTensorBoardExtras,
 } from './utils/utils';
-import {SpinnerLoading} from '../components/loading';
+import { SpinnerLoading } from '../components/loading';
 
 initTheme();
 initializeIcons();
@@ -101,17 +101,17 @@ function generateJobName(jobName) {
   return name;
 }
 
-export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
+export const JobSubmissionPage = ({ isSingle, setWizardStatus, yamlText }) => {
   const [jobTaskRoles, setJobTaskRolesState] = useState([
-    new JobTaskRole({name: 'taskrole'}),
+    new JobTaskRole({ name: 'taskrole' }),
   ]);
-  const [parameters, setParametersState] = useState([{key: '', value: ''}]);
-  const [secrets, setSecretsState] = useState([{key: '', value: ''}]);
+  const [parameters, setParametersState] = useState([{ key: '', value: '' }]);
+  const [secrets, setSecretsState] = useState([{ key: '', value: '' }]);
   const [jobInformation, setJobInformation] = useState(
     new JobBasicInfo({
       name: `${loginUser}_${Date.now()}`,
       virtualCluster: 'default',
-    })
+    }),
   );
   const [selected, setSelected] = useState(SIDEBAR_PARAM);
   const [advanceFlag, setAdvanceFlag] = useState(false);
@@ -125,55 +125,55 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
   const [errorMessages, setErrorMessages] = useState({});
 
   const setJobTaskRoles = useCallback(
-    (taskRoles) => {
+    taskRoles => {
       if (isEmpty(taskRoles)) {
-        setJobTaskRolesState([new JobTaskRole({name: 'taskrole1'})]);
+        setJobTaskRolesState([new JobTaskRole({ name: 'taskrole1' })]);
       } else {
         setJobTaskRolesState(taskRoles);
       }
     },
-    [setJobTaskRolesState]
+    [setJobTaskRolesState],
   );
 
   const setParameters = useCallback(
-    (param) => {
+    param => {
       if (isEmpty(param)) {
-        setParametersState([{key: '', value: ''}]);
+        setParametersState([{ key: '', value: '' }]);
       } else {
         setParametersState(param);
       }
     },
-    [setParametersState]
+    [setParametersState],
   );
 
   const setSecrets = useCallback(
-    (secret) => {
+    secret => {
       if (isEmpty(secret)) {
-        setSecretsState([{key: '', value: ''}]);
+        setSecretsState([{ key: '', value: '' }]);
       } else {
         setSecretsState(secret);
       }
     },
-    [setSecretsState]
+    [setSecretsState],
   );
 
   const onSelect = useCallback(
-    (x) => {
+    x => {
       if (x === selected) {
         setSelected(null);
       } else {
         setSelected(x);
       }
     },
-    [selected, setSelected]
+    [selected, setSelected],
   );
 
   const setErrorMessage = useCallback(
     (id, msg) => {
-      setErrorMessages((prev) => {
+      setErrorMessages(prev => {
         if (isEmpty(msg)) {
           if (prev !== undefined && prev[id] !== undefined) {
-            const updated = {...prev};
+            const updated = { ...prev };
             delete updated[id];
             return updated;
           }
@@ -188,7 +188,7 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
         return prev;
       });
     },
-    [setErrorMessages]
+    [setErrorMessages],
   );
 
   const contextValue = useMemo(
@@ -197,7 +197,7 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
       errorMessages,
       setErrorMessage,
     }),
-    [vcNames, errorMessages, setErrorMessage]
+    [vcNames, errorMessages, setErrorMessage],
   );
 
   useEffect(() => {
@@ -228,11 +228,14 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
       const user = params.get('user') || '';
       if (user && jobName) {
         fetchJobConfig(user, jobName)
-          .then((jobConfig) => {
-            const [jobInfo, taskRoles, parameters, , extras] = getJobComponentsFromConfig(
-              jobConfig,
-              {vcNames},
-            );
+          .then(jobConfig => {
+            const [
+              jobInfo,
+              taskRoles,
+              parameters,
+              ,
+              extras,
+            ] = getJobComponentsFromConfig(jobConfig, { vcNames });
             jobInfo.name = generateJobName(jobInfo.name);
             if (get(jobConfig, 'extras.submitFrom')) {
               delete jobConfig.extras.submitFrom;
@@ -264,10 +267,15 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
         updatedParameters,
         updatedSecrets,
         updatedExtras,
-      ] = getJobComponentsFromConfig(updatedJob, {vcNames});
+      ] = getJobComponentsFromConfig(updatedJob, { vcNames });
       if (extras.tensorBoard) {
         const updatedTensorBoardExtras = updatedExtras.tensorBoard || {};
-        if (!isValidUpdatedTensorBoardExtras(extras.tensorBoard, updatedTensorBoardExtras)) {
+        if (
+          !isValidUpdatedTensorBoardExtras(
+            extras.tensorBoard,
+            updatedTensorBoardExtras,
+          )
+        ) {
           updatedExtras.tensorBoard = extras.tensorBoard;
         }
       }
@@ -283,7 +291,7 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
   useEffect(() => {
     const taskRolesManager = new TaskRolesManager(jobTaskRoles);
     const isUpdated = taskRolesManager.populateTaskRolesWithUpdatedSecret(
-      secrets
+      secrets,
     );
     if (isUpdated) {
       taskRolesManager.populateTaskRolesDockerInfo();
@@ -291,10 +299,9 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
     }
   }, [secrets]);
 
-
   useEffect(() => {
     listUserVirtualClusters(loginUser)
-      .then((virtualClusters) => {
+      .then(virtualClusters => {
         setVcNames(virtualClusters);
       })
       .catch(alert);
@@ -316,7 +323,7 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
 
   return (
     <Context.Provider value={contextValue}>
-      <Fabric style={{height: '100%', overflowX: 'auto'}}>
+      <Fabric style={{ height: '100%', overflowX: 'auto' }}>
         <Topbar
           jobData={jobData}
           jobProtocol={jobProtocol}
@@ -325,7 +332,7 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
             updatedTaskRoles,
             updatedParameters,
             updatedSecrets,
-            updatedExtras
+            updatedExtras,
           ) => {
             setJobInformation(updatedJobInfo);
             setJobTaskRoles(updatedTaskRoles);
@@ -337,15 +344,15 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
         />
         <Stack
           className={formLayout}
-          styles={{root: {height: '95%', minWidth: 1000}}}
+          styles={{ root: { height: '95%', minWidth: 1000 } }}
           verticalAlign='space-between'
           gap='l1'
         >
           {/* top - form */}
-          <Stack styles={{root: {minHeight: 0}}} horizontal gap='l1'>
+          <Stack styles={{ root: { minHeight: 0 } }} horizontal gap='l1'>
             {/* left column */}
-            <StackItem grow styles={{root: {minWidth: 600, flexBasis: 0}}}>
-              <Stack gap='l1' styles={{root: {height: '100%'}}}>
+            <StackItem grow styles={{ root: { minWidth: 600, flexBasis: 0 } }}>
+              <Stack gap='l1' styles={{ root: { height: '100%' } }}>
                 <JobInformation
                   jobInformation={jobInformation}
                   onChange={setJobInformation}
@@ -360,8 +367,8 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
               </Stack>
             </StackItem>
             {/* right column */}
-            <StackItem shrink styles={{root: {overflowX: 'auto'}}}>
-              <Stack gap='l1' styles={{root: {height: '100%', width: 550}}}>
+            <StackItem shrink styles={{ root: { overflowX: 'auto' } }}>
+              <Stack gap='l1' styles={{ root: { height: '100%', width: 550 } }}>
                 <Parameters
                   parameters={parameters}
                   onChange={setParameters}
@@ -413,7 +420,7 @@ export const JobSubmissionPage = ({isSingle, setWizardStatus, yamlText}) => {
               updatedTaskRoles,
               updatedParameters,
               updatedSecrets,
-              updatedExtras
+              updatedExtras,
             ) => {
               setJobInformation(updatedJobInfo);
               setJobTaskRoles(updatedTaskRoles);

@@ -1,15 +1,24 @@
 import c from 'classnames';
-import {Panel, List, mergeStyleSets, getFocusStyle, getTheme, PanelType, Stack, StackItem} from 'office-ui-fabric-react';
-import React, {useCallback, useState, useEffect} from 'react';
+import {
+  Panel,
+  List,
+  mergeStyleSets,
+  getFocusStyle,
+  getTheme,
+  PanelType,
+  Stack,
+  StackItem,
+} from 'office-ui-fabric-react';
+import React, { useCallback, useState, useEffect } from 'react';
 
 import config from '../config/webportal.config';
 
 const theme = getTheme();
-const {palette, semanticColors, spacing} = theme;
+const { palette, semanticColors, spacing } = theme;
 
 const classNames = mergeStyleSets({
   itemCell: [
-    getFocusStyle(theme, {inset: -1}),
+    getFocusStyle(theme, { inset: -1 }),
     {
       minHeight: 54,
       paddingBottom: 10,
@@ -18,7 +27,7 @@ const classNames = mergeStyleSets({
       borderBottom: `1px solid ${semanticColors.bodyDivider}`,
       display: 'flex',
       selectors: {
-        '&:hover': {background: palette.neutralLight},
+        '&:hover': { background: palette.neutralLight },
       },
     },
   ],
@@ -30,19 +39,24 @@ export const NotificationButton = () => {
 
   useEffect(() => {
     const alertsUrl = `${config.alertManagerUri}/api/v1/alerts?silenced=false`;
-    fetch(alertsUrl).then((res) => {
-      if (!res.ok) {
-        throw Error('Failed to get alert infos');
-      }
-      res.json().then((data) => {
-        if (data.status !== 'success') {
-          throw Error('Failed to get alerts data');
+    fetch(alertsUrl)
+      .then(res => {
+        if (!res.ok) {
+          throw Error('Failed to get alert infos');
         }
-        setAlertItems(data.data);
-      }).catch(() => {
-        throw Error('Get alerts json failed');
-      });
-    }).catch(alert);
+        res
+          .json()
+          .then(data => {
+            if (data.status !== 'success') {
+              throw Error('Failed to get alerts data');
+            }
+            setAlertItems(data.data);
+          })
+          .catch(() => {
+            throw Error('Get alerts json failed');
+          });
+      })
+      .catch(alert);
   }, []);
 
   const open = useCallback(() => {
@@ -77,7 +91,7 @@ export const NotificationButton = () => {
     <React.Fragment>
       <i
         className={c('fa fa-bell-o')}
-        style={{fontSize: '16px'}}
+        style={{ fontSize: '16px' }}
         onClick={open}
       />
       <span
@@ -102,7 +116,7 @@ export const NotificationButton = () => {
       >
         <List
           items={alertItems}
-          onRenderCell={(item) => {
+          onRenderCell={item => {
             return (
               <div className={classNames.itemCell} data-is-focusable={true}>
                 {item.annotations.summary}

@@ -86,7 +86,8 @@ export const PAI_ENV_VAR = [
   },
 ];
 export const PROTOCOL_TOOLTIPS = {
-  jobName: 'Name for the job, need to be unique, should be string in ^[A-Za-z0-9\\-._~]+$ format.',
+  jobName:
+    'Name for the job, need to be unique, should be string in ^[A-Za-z0-9\\-._~]+$ format.',
   taskRoleName: 'Name of the taskRole, string in ^[A-Za-z0-9\\-._~]+$ format.',
   taskRoleContainerSize: [
     'Resource required per container instance',
@@ -96,15 +97,17 @@ export const PROTOCOL_TOOLTIPS = {
     'Task roles are different types of task in the protocol.',
     'One job may have one or more task roles, each task role has one or more instances, and each instance runs inside one container.',
   ],
-  parameters: 'Parameters are key-value pairs that you could save your frequently used values and reference them in command section by their keys.',
+  parameters:
+    'Parameters are key-value pairs that you could save your frequently used values and reference them in command section by their keys.',
   secrets: `Secrets are used to store sensitive data. The value will be masked and won't be seen by other users.`,
   data:
     'Data section is used to generate pre-command that download/mount your data to specific path in container.',
   tools:
     'Tools section is used to configure the tools that are useful for jobs.',
-  dockerImage: 'Please contact admin to make sure which cuda versions in docker image is supported by gpu drivers.',
+  dockerImage:
+    'Please contact admin to make sure which cuda versions in docker image is supported by gpu drivers.',
   teamStorage:
-    'Team share storage is external storage defined by cluster admin. Select an element means the external storage will be mount to \'path\' and user can treat it as local path.',
+    "Team share storage is external storage defined by cluster admin. Select an element means the external storage will be mount to 'path' and user can treat it as local path.",
 };
 
 export const COMMAND_PLACEHOLDER = `'You could define your own Parameters, Secrets or Data mount point on the right sidebar.
@@ -114,7 +117,8 @@ All lines will be concatenated by "&&". So do not use characters like "#", "\\" 
 export const DOCKER_OPTIONS = [
   {
     key: 'tensorflow-gpu-python3.6',
-    text: 'tensorflow+python3.6 with gpu, cuda 9.0 (image: openpai/tensorflow-py36-cu90)',
+    text:
+      'tensorflow+python3.6 with gpu, cuda 9.0 (image: openpai/tensorflow-py36-cu90)',
     image: 'openpai/tensorflow-py36-cu90',
   },
   {
@@ -124,7 +128,8 @@ export const DOCKER_OPTIONS = [
   },
   {
     key: 'tensorflow-gpu-python2.7',
-    text: 'tensorflow+python2.7 with gpu, cuda 9.0 (image: openpai/tensorflow-py27-cu90)',
+    text:
+      'tensorflow+python2.7 with gpu, cuda 9.0 (image: openpai/tensorflow-py27-cu90)',
     image: 'openpai/tensorflow-py27-cu90',
   },
   {
@@ -134,7 +139,8 @@ export const DOCKER_OPTIONS = [
   },
   {
     key: 'pytorch-gpu',
-    text: 'pytorch+python3.6 with gpu, cuda 9.0 (image: openpai/pytorch-py36-cu90)',
+    text:
+      'pytorch+python3.6 with gpu, cuda 9.0 (image: openpai/pytorch-py36-cu90)',
     image: 'openpai/pytorch-py36-cu90',
   },
   {

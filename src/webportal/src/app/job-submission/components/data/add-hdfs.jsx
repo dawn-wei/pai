@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {cloneDeep} from 'lodash';
+import React, { useState, useEffect } from 'react';
+import { cloneDeep } from 'lodash';
 import {
   TextField,
   TagPicker,
@@ -11,12 +11,15 @@ import {
 } from 'office-ui-fabric-react';
 import PropTypes from 'prop-types';
 
-import {STORAGE_PREFIX, ERROR_MARGIN} from '../../utils/constants';
-import {InputData} from '../../models/data/input-data';
-import {validateMountPath, validateHDFSPathAsync} from '../../utils/validation';
-import {WebHDFSClient} from '../../utils/webhdfs';
+import { STORAGE_PREFIX, ERROR_MARGIN } from '../../utils/constants';
+import { InputData } from '../../models/data/input-data';
+import {
+  validateMountPath,
+  validateHDFSPathAsync,
+} from '../../utils/validation';
+import { WebHDFSClient } from '../../utils/webhdfs';
 
-const {semanticColors} = getTheme();
+const { semanticColors } = getTheme();
 
 export const AddHDFS = ({
   dataList,
@@ -38,7 +41,7 @@ export const AddHDFS = ({
       setIsHdfsEnabled(false);
       setHdfsPathErrorMessage('Pai HDFS is not available');
     } else {
-      hdfsClient.checkAccess().then((isAccessiable) => {
+      hdfsClient.checkAccess().then(isAccessiable => {
         setIsHdfsEnabled(isAccessiable);
         if (!isAccessiable) {
           setHdfsPathErrorMessage('Pai HDFS is not available');
@@ -63,7 +66,7 @@ export const AddHDFS = ({
     setDataType('none');
   };
 
-  const onFilterChanged = async (filterText) => {
+  const onFilterChanged = async filterText => {
     if (!isHdfsEnabled || !hdfsClient) {
       return [];
     }
@@ -72,7 +75,7 @@ export const AddHDFS = ({
       const pathPrefix = filterText.slice(0, filterText.lastIndexOf('/') + 1);
       result = await hdfsClient.readDir(`${hdfsPathPrefix}${pathPrefix}`);
       const resultTags = result
-        .filter((path) => {
+        .filter(path => {
           if (filterText.lastIndexOf('/') === filterText.length - 1) {
             return true;
           }
@@ -82,7 +85,7 @@ export const AddHDFS = ({
           }
           return path.includes(partPath);
         })
-        .map((pathSuffix) => {
+        .map(pathSuffix => {
           return {
             name: pathSuffix,
             key: `${pathPrefix}${pathSuffix}`,
@@ -93,7 +96,7 @@ export const AddHDFS = ({
       return [];
     }
   };
-  const onItemSelected = async (selectedItem) => {
+  const onItemSelected = async selectedItem => {
     if (!selectedItem) {
       return null;
     }
@@ -120,7 +123,7 @@ export const AddHDFS = ({
         <TextField
           prefix={STORAGE_PREFIX}
           errorMessage={containerPathErrorMessage}
-          styles={{root: {width: 200}}}
+          styles={{ root: { width: 200 } }}
           onChange={(_event, newValue) => {
             const valid = validateMountPath(`/${newValue}`);
             if (!valid.isLegal) {
@@ -160,12 +163,14 @@ export const AddHDFS = ({
       </Stack.Item>
       <Stack.Item align='end'>
         <IconButton
-          iconProps={{iconName: 'View'}}
+          iconProps={{ iconName: 'View' }}
           disabled={!isHdfsEnabled}
           styles={{
             root: {
               marginBottom:
-                containerPathErrorMessage || hdfsPathErrorMessage ? ERROR_MARGIN : 0,
+                containerPathErrorMessage || hdfsPathErrorMessage
+                  ? ERROR_MARGIN
+                  : 0,
             },
             rootDisabled: {
               backgroundColor: 'transparent',
@@ -178,12 +183,14 @@ export const AddHDFS = ({
       </Stack.Item>
       <Stack.Item align='end'>
         <IconButton
-          iconProps={{iconName: 'Accept'}}
+          iconProps={{ iconName: 'Accept' }}
           disabled={containerPathErrorMessage || hdfsPathErrorMessage}
           styles={{
             root: {
               marginBottom:
-                containerPathErrorMessage || hdfsPathErrorMessage ? ERROR_MARGIN : 0,
+                containerPathErrorMessage || hdfsPathErrorMessage
+                  ? ERROR_MARGIN
+                  : 0,
             },
             rootDisabled: {
               backgroundColor: 'transparent',
@@ -194,11 +201,13 @@ export const AddHDFS = ({
       </Stack.Item>
       <Stack.Item align='end'>
         <IconButton
-          iconProps={{iconName: 'Cancel'}}
+          iconProps={{ iconName: 'Cancel' }}
           styles={{
             root: {
               marginBottom:
-                containerPathErrorMessage || hdfsPathErrorMessage ? ERROR_MARGIN : 0,
+                containerPathErrorMessage || hdfsPathErrorMessage
+                  ? ERROR_MARGIN
+                  : 0,
             },
           }}
           onClick={() => {

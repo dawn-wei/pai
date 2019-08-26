@@ -16,23 +16,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import c from 'classnames';
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import querystring from 'querystring';
-import {Icon, Stack, FontClassNames, ColorClassNames, DefaultButton, getTheme} from 'office-ui-fabric-react';
+import {
+  Icon,
+  Stack,
+  FontClassNames,
+  ColorClassNames,
+  DefaultButton,
+  getTheme,
+} from 'office-ui-fabric-react';
 import React from 'react';
 
 import Card from '../../components/card';
-import {getHumanizedJobStateString} from '../../components/util/job';
+import { getHumanizedJobStateString } from '../../components/util/job';
 
 import t from '../../components/tachyons.scss';
 
 const isAdmin = cookies.get('admin') === 'true';
-const StatusItem = ({className, icon, name, count, link}) => {
-  const {spacing} = getTheme();
+const StatusItem = ({ className, icon, name, count, link }) => {
+  const { spacing } = getTheme();
   return (
     <Stack
-      styles={{root: [{minWidth: 280}, className]}}
+      styles={{ root: [{ minWidth: 280 }, className] }}
       horizontal
       horizontalAlign='space-between'
       verticalAlign='center'
@@ -42,21 +49,28 @@ const StatusItem = ({className, icon, name, count, link}) => {
       <Stack.Item>
         <div className={c(t.flex, t.itemsCenter, t.justifyStart)}>
           <div>
-            <Icon className={ColorClassNames.neutralSecondary} iconName={icon} />
+            <Icon
+              className={ColorClassNames.neutralSecondary}
+              iconName={icon}
+            />
           </div>
-          <div className={c(ColorClassNames.neutralSecondary, FontClassNames.large)} style={{width: '80px', marginLeft: spacing.s2}}>
+          <div
+            className={c(
+              ColorClassNames.neutralSecondary,
+              FontClassNames.large,
+            )}
+            style={{ width: '80px', marginLeft: spacing.s2 }}
+          >
             {name}
           </div>
         </div>
       </Stack.Item>
       <Stack.Item>
-        <div className={c(FontClassNames.xLarge)}>
-          {count}
-        </div>
+        <div className={c(FontClassNames.xLarge)}>{count}</div>
       </Stack.Item>
       <Stack.Item>
         <DefaultButton
-          styles={{root: [{width: 100}]}}
+          styles={{ root: [{ width: 100 }] }}
           text='View all'
           href={link}
         />
@@ -73,18 +87,26 @@ StatusItem.propTypes = {
   link: PropTypes.string.isRequired,
 };
 
-const JobStatus = ({className, jobs}) => {
+const JobStatus = ({ className, jobs }) => {
   let waiting = 0;
   let running = 0;
   let stopped = 0;
   let failed = 0;
   let succeeded = 0;
   if (!isEmpty(jobs)) {
-    waiting = jobs.filter((x) => getHumanizedJobStateString(x) === 'Waiting').length;
-    running = jobs.filter((x) => ['Running', 'Stopping', 'Completing', 'RetryPending'].includes(getHumanizedJobStateString(x))).length;
-    stopped = jobs.filter((x) => getHumanizedJobStateString(x) === 'Stopped').length;
-    failed = jobs.filter((x) => getHumanizedJobStateString(x) === 'Failed').length;
-    succeeded = jobs.filter((x) => getHumanizedJobStateString(x) === 'Succeeded').length;
+    waiting = jobs.filter(x => getHumanizedJobStateString(x) === 'Waiting')
+      .length;
+    running = jobs.filter(x =>
+      ['Running', 'Stopping', 'Completing', 'RetryPending'].includes(
+        getHumanizedJobStateString(x),
+      ),
+    ).length;
+    stopped = jobs.filter(x => getHumanizedJobStateString(x) === 'Stopped')
+      .length;
+    failed = jobs.filter(x => getHumanizedJobStateString(x) === 'Failed')
+      .length;
+    succeeded = jobs.filter(x => getHumanizedJobStateString(x) === 'Succeeded')
+      .length;
   }
   return (
     <Card className={c(className, t.ph5)}>

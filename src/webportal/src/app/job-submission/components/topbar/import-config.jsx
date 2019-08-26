@@ -23,24 +23,29 @@
  * SOFTWARE.
  */
 
-import React, {useContext} from 'react';
-import {FontWeights, DefaultButton, Label, getTheme} from 'office-ui-fabric-react';
-import {isNil} from 'lodash';
+import React, { useContext } from 'react';
+import {
+  FontWeights,
+  DefaultButton,
+  Label,
+  getTheme,
+} from 'office-ui-fabric-react';
+import { isNil } from 'lodash';
 import PropTypes from 'prop-types';
 
-import {JobProtocol} from '../../models/job-protocol';
+import { JobProtocol } from '../../models/job-protocol';
 import Context from '../context';
 import {
   getJobComponentsFromConfig,
   isValidUpdatedTensorBoardExtras,
 } from '../../utils/utils';
 
-const {palette} = getTheme();
+const { palette } = getTheme();
 
-export const ImportConfig = React.memo(({extras, onChange}) => {
-  const {vcNames} = useContext(Context);
+export const ImportConfig = React.memo(({ extras, onChange }) => {
+  const { vcNames } = useContext(Context);
 
-  const _updatedComponent = (protocolYaml) => {
+  const _updatedComponent = protocolYaml => {
     const updatedJob = JobProtocol.fromYaml(protocolYaml);
     if (isNil(updatedJob)) {
       return;
@@ -56,11 +61,16 @@ export const ImportConfig = React.memo(({extras, onChange}) => {
       updatedParameters,
       updatedSecrets,
       updatedExtras,
-    ] = getJobComponentsFromConfig(updatedJob, {vcNames});
+    ] = getJobComponentsFromConfig(updatedJob, { vcNames });
 
     if (extras.tensorBoard) {
       const updatedTensorBoardExtras = updatedExtras.tensorBoard || {};
-      if (!isValidUpdatedTensorBoardExtras(extras.tensorBoard, updatedTensorBoardExtras)) {
+      if (
+        !isValidUpdatedTensorBoardExtras(
+          extras.tensorBoard,
+          updatedTensorBoardExtras,
+        )
+      ) {
         updatedExtras.tensorBoard = extras.tensorBoard;
       }
     }
@@ -74,7 +84,7 @@ export const ImportConfig = React.memo(({extras, onChange}) => {
     );
   };
 
-  const _importFile = (event) => {
+  const _importFile = event => {
     event.preventDefault();
     const files = event.target.files;
     if (!files || !files[0]) {
@@ -94,17 +104,21 @@ export const ImportConfig = React.memo(({extras, onChange}) => {
 
   return (
     <DefaultButton>
-      <Label styles={{root: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        width: '100%',
-        cursor: 'pointer',
-        fontWeight: FontWeights.semibold,
-        backgroundColor: palette.neutralTertiaryAlt,
-      }}}>
+      <Label
+        styles={{
+          root: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            cursor: 'pointer',
+            fontWeight: FontWeights.semibold,
+            backgroundColor: palette.neutralTertiaryAlt,
+          },
+        }}
+      >
         {'Import'}
         <input
           type='file'

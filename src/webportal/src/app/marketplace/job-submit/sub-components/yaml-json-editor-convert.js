@@ -19,12 +19,12 @@ require('json-editor');
 
 const yaml = require('js-yaml');
 
-const convertParameterToKeyValue = (d) => {
+const convertParameterToKeyValue = d => {
   if ('parameters' in d) {
-    let parameters = d['parameters'];
-    d['parameters'] = [];
-    Object.keys(parameters).forEach((key) => {
-      d['parameters'].push({
+    const parameters = d.parameters;
+    d.parameters = [];
+    Object.keys(parameters).forEach(key => {
+      d.parameters.push({
         name: key,
         value: parameters[key],
       });
@@ -32,17 +32,17 @@ const convertParameterToKeyValue = (d) => {
   }
 };
 
-const convertParameterFromKeyValue = (d) => {
+const convertParameterFromKeyValue = d => {
   if ('parameters' in d) {
-    let parameters = d['parameters'];
-    d['parameters'] = {};
-    parameters.forEach((t) => {
-      d['parameters'][t['name']] = t['value'];
+    const parameters = d.parameters;
+    d.parameters = {};
+    parameters.forEach(t => {
+      d.parameters[t.name] = t.value;
     });
   }
 };
 
-const yamlLoad = (yamlString) => {
+const yamlLoad = yamlString => {
   try {
     return yaml.safeLoad(yamlString);
   } catch (error) {
@@ -51,20 +51,20 @@ const yamlLoad = (yamlString) => {
   }
 };
 
-const jsonToJsonEditor = (data) => {
+const jsonToJsonEditor = data => {
   try {
     if (!data || typeof data !== 'object') {
       throw new Error('Content is null or does not have required format.');
     }
 
     if ('tasks' in data) {
-      data['tasks'].forEach((task) => {
-        task['instances'] = task['resource']['instances'];
-        task['cpu'] = task['resource']['resourcePerInstance']['cpu'];
-        task['gpu'] = task['resource']['resourcePerInstance']['gpu'];
-        task['memoryMB'] = task['resource']['resourcePerInstance']['memoryMB'];
-        task['portList'] = task['resource']['portList'];
-        delete task['resource'];
+      data.tasks.forEach(task => {
+        task.instances = task.resource.instances;
+        task.cpu = task.resource.resourcePerInstance.cpu;
+        task.gpu = task.resource.resourcePerInstance.gpu;
+        task.memoryMB = task.resource.resourcePerInstance.memoryMB;
+        task.portList = task.resource.portList;
+        delete task.resource;
         convertParameterToKeyValue(task);
       });
     }
@@ -80,38 +80,38 @@ const jsonToJsonEditor = (data) => {
   }
 };
 
-const jsonEditorToJobJson = (editors) => {
-  let res = JSON.parse(JSON.stringify(editors['job'][0].getValue())); // deep copy
+const jsonEditorToJobJson = editors => {
+  const res = JSON.parse(JSON.stringify(editors.job[0].getValue())); // deep copy
   convertParameterFromKeyValue(res);
 
-  res['type'] = 'job';
-  res['prerequisites'] = [];
-  res['tasks'] = [];
+  res.type = 'job';
+  res.prerequisites = [];
+  res.tasks = [];
 
-  ['data', 'script', 'dockerimage', 'task'].forEach((type) => {
-    editors[type].forEach((editor) => {
+  ['data', 'script', 'dockerimage', 'task'].forEach(type => {
+    editors[type].forEach(editor => {
       if (editor != null) {
-        let temp = JSON.parse(JSON.stringify(editor.getValue()));
+        const temp = JSON.parse(JSON.stringify(editor.getValue()));
         if (type == 'task') {
           convertParameterFromKeyValue(temp);
-          temp['resource'] = {
-            'instances': temp['instances'],
-            'resourcePerInstance': {
-              cpu: temp['cpu'],
-              memoryMB: temp['memoryMB'],
-              gpu: temp['gpu'],
+          temp.resource = {
+            instances: temp.instances,
+            resourcePerInstance: {
+              cpu: temp.cpu,
+              memoryMB: temp.memoryMB,
+              gpu: temp.gpu,
             },
-            'portList': temp['portList'],
+            portList: temp.portList,
           };
-          delete temp['portList'];
-          delete temp['instances'];
-          delete temp['cpu'];
-          delete temp['memoryMB'];
-          delete temp['gpu'];
-          res['tasks'].push(temp);
+          delete temp.portList;
+          delete temp.instances;
+          delete temp.cpu;
+          delete temp.memoryMB;
+          delete temp.gpu;
+          res.tasks.push(temp);
         } else {
-          temp['type'] = type;
-          res['prerequisites'].push(temp);
+          temp.type = type;
+          res.prerequisites.push(temp);
         }
       }
     });
@@ -119,8 +119,8 @@ const jsonEditorToJobJson = (editors) => {
   return res;
 };
 
-const exportToYaml = (editors) => {
-  let res = jsonEditorToJobJson(editors);
+const exportToYaml = editors => {
+  const res = jsonEditorToJobJson(editors);
   return yaml.safeDump(res);
 };
 

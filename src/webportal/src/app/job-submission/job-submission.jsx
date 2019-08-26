@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import {
   Fabric,
@@ -41,10 +41,10 @@ import singleRoot from '../../assets/img/single-root.svg';
 import singleHover from '../../assets/img/single-hover.svg';
 import distributeRoot from '../../assets/img/distribute-root.svg';
 import distributeHover from '../../assets/img/distribute-hover.svg';
-import {JobSubmissionPage} from './job-submission-page';
+import { JobSubmissionPage } from './job-submission-page';
 import Card from '../components/card';
 
-const {spacing, palette} = getTheme();
+const { spacing, palette } = getTheme();
 
 const IconStyle = {
   root: {
@@ -76,7 +76,7 @@ const JobWizard = () => {
 
   const uploadFile = React.createRef();
 
-  const _importFile = (event) => {
+  const _importFile = event => {
     event.preventDefault();
     const files = event.target.files;
     if (!files || !files[0]) {
@@ -103,18 +103,28 @@ const JobWizard = () => {
   }, []);
 
   return (
-    <Fabric style={{height: '100%'}}>
-      {wizardStatus === 'wizard' &&
-        <Card style={{height: '90%', margin: `${spacing.l2}`}}>
+    <Fabric style={{ height: '100%' }}>
+      {wizardStatus === 'wizard' && (
+        <Card style={{ height: '90%', margin: `${spacing.l2}` }}>
           <Stack horizontalAlign='center' padding={100} gap={100}>
-            <Text styles={{root: {color: palette.themePrimary, fontSize: FontSizes.xxLarge, fontWeight: FontWeights.semibold, alignItems: 'center', position: 'absolute'}}}>
+            <Text
+              styles={{
+                root: {
+                  color: palette.themePrimary,
+                  fontSize: FontSizes.xxLarge,
+                  fontWeight: FontWeights.semibold,
+                  alignItems: 'center',
+                  position: 'absolute',
+                },
+              }}
+            >
               Select your job type
             </Text>
             <Stack
               horizontal
               horizontalAlign='center'
               gap={120}
-              style={{width: '100%', marginTop: 100}}
+              style={{ width: '100%', marginTop: 100 }}
             >
               <Stack horizontalAlign='center' gap={50}>
                 <DefaultButton
@@ -128,18 +138,25 @@ const JobWizard = () => {
                       ...IconStyle.hover,
                     },
                   }}
-                  onClick = {() => {
+                  onClick={() => {
                     uploadFile.current.click();
                   }}
                 />
                 <input
                   type='file'
                   ref={uploadFile}
-                  style={{display: 'none'}}
+                  style={{ display: 'none' }}
                   accept='.yml,.yaml'
                   onChange={_importFile}
                 />
-                <Text styles={{root: {fontSize: FontSizes.large, fontWeight: FontWeights.semibold}}}>
+                <Text
+                  styles={{
+                    root: {
+                      fontSize: FontSizes.large,
+                      fontWeight: FontWeights.semibold,
+                    },
+                  }}
+                >
                   Import Config
                 </Text>
               </Stack>
@@ -159,7 +176,14 @@ const JobWizard = () => {
                     setWizardStatus('single');
                   }}
                 />
-                <Text styles={{root: {fontSize: FontSizes.large, fontWeight: FontWeights.semibold}}}>
+                <Text
+                  styles={{
+                    root: {
+                      fontSize: FontSizes.large,
+                      fontWeight: FontWeights.semibold,
+                    },
+                  }}
+                >
                   Single Job
                 </Text>
               </Stack>
@@ -179,20 +203,31 @@ const JobWizard = () => {
                     setWizardStatus('general');
                   }}
                 />
-                <Text styles={{root: {fontSize: FontSizes.large, fontWeight: FontWeights.semibold}}}>
+                <Text
+                  styles={{
+                    root: {
+                      fontSize: FontSizes.large,
+                      fontWeight: FontWeights.semibold,
+                    },
+                  }}
+                >
                   Distributed Job
                 </Text>
               </Stack>
             </Stack>
           </Stack>
         </Card>
-      }
-      {wizardStatus === 'single' &&
-        <JobSubmissionPage isSingle={true} setWizardStatus={setWizardStatus}/>
-      }
-      {wizardStatus === 'general' &&
-        <JobSubmissionPage isSingle={false} setWizardStatus={setWizardStatus} yamlText={yamlText}/>
-      }
+      )}
+      {wizardStatus === 'single' && (
+        <JobSubmissionPage isSingle={true} setWizardStatus={setWizardStatus} />
+      )}
+      {wizardStatus === 'general' && (
+        <JobSubmissionPage
+          isSingle={false}
+          setWizardStatus={setWizardStatus}
+          yamlText={yamlText}
+        />
+      )}
     </Fabric>
   );
 };

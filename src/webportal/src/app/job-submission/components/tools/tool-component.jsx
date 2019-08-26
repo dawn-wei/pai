@@ -24,44 +24,40 @@
  */
 
 import React from 'react';
-import {Stack} from 'office-ui-fabric-react';
+import { Stack } from 'office-ui-fabric-react';
 import PropTypes from 'prop-types';
-import {SidebarCard} from '../sidebar/sidebar-card';
-import {Hint} from '../sidebar/hint';
-import {TensorBoard} from './tensorboard';
-import {PROTOCOL_TOOLTIPS} from '../../utils/constants';
+import { SidebarCard } from '../sidebar/sidebar-card';
+import { Hint } from '../sidebar/hint';
+import { TensorBoard } from './tensorboard';
+import { PROTOCOL_TOOLTIPS } from '../../utils/constants';
 
-export const ToolComponent = React.memo(({
-  jobData,
-  taskRoles,
-  extras,
-  onChange,
-  selected,
-  onSelect,
-}) => {
-  return (
-    <SidebarCard
-      title='Tools'
-      tooltip={PROTOCOL_TOOLTIPS.tools}
-      selected={selected}
-      onSelect={onSelect}
-    >
-      <Stack gap='m'>
-        <Hint>
-          Tools section is used to configure the tools that are useful for jobs.
-        </Hint>
-        <div>
-          <TensorBoard
-            jobData={jobData}
-            taskRoles={taskRoles}
-            extras={extras}
-            onChange={onChange}
-          />
-        </div>
-      </Stack>
-    </SidebarCard>
-  );
-});
+export const ToolComponent = React.memo(
+  ({ jobData, taskRoles, extras, onChange, selected, onSelect }) => {
+    return (
+      <SidebarCard
+        title='Tools'
+        tooltip={PROTOCOL_TOOLTIPS.tools}
+        selected={selected}
+        onSelect={onSelect}
+      >
+        <Stack gap='m'>
+          <Hint>
+            Tools section is used to configure the tools that are useful for
+            jobs.
+          </Hint>
+          <div>
+            <TensorBoard
+              jobData={jobData}
+              taskRoles={taskRoles}
+              extras={extras}
+              onChange={onChange}
+            />
+          </div>
+        </Stack>
+      </SidebarCard>
+    );
+  },
+);
 
 ToolComponent.propTypes = {
   jobData: PropTypes.object.isRequired,

@@ -15,12 +15,28 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import {ThemeProvider} from '@uifabric/foundation';
-import {createTheme, ColorClassNames, FontClassNames, FontSizes} from '@uifabric/styling';
+import { ThemeProvider } from '@uifabric/foundation';
+import {
+  createTheme,
+  ColorClassNames,
+  FontClassNames,
+  FontSizes,
+} from '@uifabric/styling';
 import c from 'classnames';
-import {capitalize, isEmpty, isNil, flatten} from 'lodash';
-import {CommandBarButton, PrimaryButton, TooltipHost, DirectionalHint, Icon} from 'office-ui-fabric-react';
-import {DetailsList, SelectionMode, DetailsRow, DetailsListLayoutMode} from 'office-ui-fabric-react/lib/DetailsList';
+import { capitalize, isEmpty, isNil, flatten } from 'lodash';
+import {
+  CommandBarButton,
+  PrimaryButton,
+  TooltipHost,
+  DirectionalHint,
+  Icon,
+} from 'office-ui-fabric-react';
+import {
+  DetailsList,
+  SelectionMode,
+  DetailsRow,
+  DetailsListLayoutMode,
+} from 'office-ui-fabric-react/lib/DetailsList';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -29,8 +45,8 @@ import t from '../../../../../components/tachyons.scss';
 
 import Context from './context';
 import Timer from './timer';
-import {getContainerLog} from '../conn';
-import {parseGpuAttr} from '../util';
+import { getContainerLog } from '../conn';
+import { parseGpuAttr } from '../util';
 import MonacoPanel from '../../../../../components/monaco-panel';
 import StatusBadge from '../../../../../components/status-badge';
 
@@ -81,24 +97,34 @@ export default class TaskRoleContainerList extends React.Component {
   }
 
   logAutoRefresh() {
-    const {logUrl} = this.state;
-    void getContainerLog(logUrl).then(({text, fullLogLink}) => this.setState(
-      (prevState) => prevState.logUrl === logUrl && {
-        monacoProps: {value: text},
-        monacoFooterButton: (
-          <PrimaryButton
-            text='View Full Log'
-            target='_blank'
-            styles={{
-              rootFocused: [ColorClassNames.white],
-            }}
-            href={fullLogLink}
-          />
+    const { logUrl } = this.state;
+    getContainerLog(logUrl)
+      .then(({ text, fullLogLink }) =>
+        this.setState(
+          prevState =>
+            prevState.logUrl === logUrl && {
+              monacoProps: { value: text },
+              monacoFooterButton: (
+                <PrimaryButton
+                  text='View Full Log'
+                  target='_blank'
+                  styles={{
+                    rootFocused: [ColorClassNames.white],
+                  }}
+                  href={fullLogLink}
+                />
+              ),
+            },
         ),
-      }
-    )).catch((err) => this.setState(
-      (prevState) => prevState.logUrl === logUrl && {monacoProps: {value: err.message}}
-    ));
+      )
+      .catch(err =>
+        this.setState(
+          prevState =>
+            prevState.logUrl === logUrl && {
+              monacoProps: { value: err.message },
+            },
+        ),
+      );
   }
 
   onDismiss() {
@@ -111,37 +137,51 @@ export default class TaskRoleContainerList extends React.Component {
   }
 
   showContainerLog(logUrl, title) {
-    this.setState({
-      monacoProps: {value: 'Loading...'},
-      monacoTitle: title,
-      logUrl,
-    }, () => {
-      this.logAutoRefresh(); // start immediately
-    });
+    this.setState(
+      {
+        monacoProps: { value: 'Loading...' },
+        monacoTitle: title,
+        logUrl,
+      },
+      () => {
+        this.logAutoRefresh(); // start immediately
+      },
+    );
   }
 
   showSshInfo(id) {
-    const {sshInfo} = this.context;
-    const containerSshInfo = sshInfo && sshInfo.containers.find((x) => x.id === id);
+    const { sshInfo } = this.context;
+    const containerSshInfo =
+      sshInfo && sshInfo.containers.find(x => x.id === id);
     if (!containerSshInfo) {
       const res = [];
       res.push('This job does not contain SSH info.');
-      res.push('Please note that if your docker image does not have openssh-server and curl packages, SSH will not be enabled.\n');
-      res.push('Solution 1: Use one of the recommended docker images on the submission page.');
-      res.push('Solution 2: Use your own image, but enable SSH for it. Please follow the instructions on https://aka.ms/AA5u4sq to do such work.');
+      res.push(
+        'Please note that if your docker image does not have openssh-server and curl packages, SSH will not be enabled.\n',
+      );
+      res.push(
+        'Solution 1: Use one of the recommended docker images on the submission page.',
+      );
+      res.push(
+        'Solution 2: Use your own image, but enable SSH for it. Please follow the instructions on https://aka.ms/AA5u4sq to do such work.',
+      );
       this.setState({
-        monacoProps: {value: res.join('\n')},
+        monacoProps: { value: res.join('\n') },
         monacoTitle: `SSH to ${id}`,
       });
     } else {
       const res = [];
       res.push('# Step 1. Open a Bash shell terminal.');
       res.push('# Step 2: Download the private key:');
-      res.push(`wget '${sshInfo.keyPair.privateKeyDirectDownloadLink}' -O ${sshInfo.keyPair.privateKeyFileName}`);
+      res.push(
+        `wget '${sshInfo.keyPair.privateKeyDirectDownloadLink}' -O ${sshInfo.keyPair.privateKeyFileName}`,
+      );
       res.push('# Step 3: Set correct permission for the key file:');
       res.push(`chmod 600 ${sshInfo.keyPair.privateKeyFileName}`);
       res.push('# Step 4: Connect to the container:');
-      res.push(`ssh -i ${sshInfo.keyPair.privateKeyFileName} -p ${containerSshInfo.sshPort} root@${containerSshInfo.sshIp}`);
+      res.push(
+        `ssh -i ${sshInfo.keyPair.privateKeyFileName} -p ${containerSshInfo.sshPort} root@${containerSshInfo.sshIp}`,
+      );
       res.push('');
       this.setState({
         monacoProps: {
@@ -166,10 +206,10 @@ export default class TaskRoleContainerList extends React.Component {
         maxWidth: 50,
         isResizable: true,
         onRender: (item, idx) => {
-          return !isNil(idx) && (
-            <div className={FontClassNames.mediumPlus}>
-              {idx}
-            </div>
+          return (
+            !isNil(idx) && (
+              <div className={FontClassNames.mediumPlus}>{idx}</div>
+            )
           );
         },
       },
@@ -180,12 +220,14 @@ export default class TaskRoleContainerList extends React.Component {
         minWidth: 100,
         maxWidth: 500,
         isResizable: true,
-        onRender: (item) => {
+        onRender: item => {
           const id = item.containerId;
-          return !isNil(id) && (
-            <div className={c(t.truncate, FontClassNames.mediumPlus)}>
-              {id}
-            </div>
+          return (
+            !isNil(id) && (
+              <div className={c(t.truncate, FontClassNames.mediumPlus)}>
+                {id}
+              </div>
+            )
           );
         },
       },
@@ -207,14 +249,21 @@ export default class TaskRoleContainerList extends React.Component {
         minWidth: 120,
         maxWidth: 180,
         isResizable: true,
-        onRender: (item) => {
+        onRender: item => {
           const ports = item.containerPorts;
-          return !isNil(ports) && (
-            <div className={c(t.truncate)}>
-              {flatten(Object.keys(ports).map(
-                (key, idx) => [idx !== 0 && <span className={t.ml2} key={`gap-${idx}`}></span>, `${key}: ${ports[key]}`]
-              ))}
-            </div>
+          return (
+            !isNil(ports) && (
+              <div className={c(t.truncate)}>
+                {flatten(
+                  Object.keys(ports).map((key, idx) => [
+                    idx !== 0 && (
+                      <span className={t.ml2} key={`gap-${idx}`}></span>
+                    ),
+                    `${key}: ${ports[key]}`,
+                  ]),
+                )}
+              </div>
+            )
           );
         },
       },
@@ -226,8 +275,10 @@ export default class TaskRoleContainerList extends React.Component {
         minWidth: 40,
         maxWidth: 60,
         isResizable: true,
-        onRender: (item) => {
-          const gpuAttr = isNil(item.containerGpus) ? null : parseGpuAttr(item.containerGpus);
+        onRender: item => {
+          const gpuAttr = isNil(item.containerGpus)
+            ? null
+            : parseGpuAttr(item.containerGpus);
           if (isNil(gpuAttr)) {
             return null;
           } else if (gpuAttr.length === 0) {
@@ -242,8 +293,11 @@ export default class TaskRoleContainerList extends React.Component {
                   tooltipProps={{
                     onRenderContent: () => (
                       <div>
-                        {gpuAttr.map((x) => (
-                          <span className={t.mr2} key={`gpu-${x}`}>{`#${x}`}</span>
+                        {gpuAttr.map(x => (
+                          <span
+                            className={t.mr2}
+                            key={`gpu-${x}`}
+                          >{`#${x}`}</span>
                         ))}
                       </div>
                     ),
@@ -253,7 +307,19 @@ export default class TaskRoleContainerList extends React.Component {
                   <div>
                     <span>
                       {gpuAttr.length}
-                      <Icon iconName='Info' styles={{root: [{fontSize: FontSizes.small, verticalAlign: 'bottom'}, t.ml2, ColorClassNames.neutralSecondary]}} />
+                      <Icon
+                        iconName='Info'
+                        styles={{
+                          root: [
+                            {
+                              fontSize: FontSizes.small,
+                              verticalAlign: 'bottom',
+                            },
+                            t.ml2,
+                            ColorClassNames.neutralSecondary,
+                          ],
+                        }}
+                      />
                     </span>
                   </div>
                 </TooltipHost>
@@ -269,7 +335,7 @@ export default class TaskRoleContainerList extends React.Component {
         minWidth: 100,
         maxWidth: 100,
         isResizable: true,
-        onRender: (item) => <StatusBadge status={capitalize(item.taskState)}/>,
+        onRender: item => <StatusBadge status={capitalize(item.taskState)} />,
       },
       {
         key: 'info',
@@ -278,62 +344,80 @@ export default class TaskRoleContainerList extends React.Component {
         headerClassName: FontClassNames.medium,
         minWidth: 300,
         maxWidth: 340,
-        onRender: (item) => (
-          <div className={c(t.h100, t.flex, t.justifyStart, t.itemsCenter, t.ml1)}>
+        onRender: item => (
+          <div
+            className={c(t.h100, t.flex, t.justifyStart, t.itemsCenter, t.ml1)}
+          >
             <div className={c(t.flex, t.h3)}>
               <CommandBarButton
                 className={c(FontClassNames.mediumPlus)}
                 styles={{
-                  root: {backgroundColor: 'transparent'},
-                  rootDisabled: {backgroundColor: 'transparent'},
+                  root: { backgroundColor: 'transparent' },
+                  rootDisabled: { backgroundColor: 'transparent' },
                 }}
-                iconProps={{iconName: 'CommandPrompt'}}
+                iconProps={{ iconName: 'CommandPrompt' }}
                 text='View SSH Info'
                 onClick={() => this.showSshInfo(item.containerId)}
-                disabled={isNil(item.containerId) || item.taskState !== 'RUNNING'}
+                disabled={
+                  isNil(item.containerId) || item.taskState !== 'RUNNING'
+                }
               />
               <CommandBarButton
                 className={FontClassNames.mediumPlus}
                 styles={{
-                  root: {backgroundColor: 'transparent'},
-                  rootDisabled: {backgroundColor: 'transparent'},
+                  root: { backgroundColor: 'transparent' },
+                  rootDisabled: { backgroundColor: 'transparent' },
                 }}
-                iconProps={{iconName: 'TextDocument'}}
+                iconProps={{ iconName: 'TextDocument' }}
                 text='Stdout'
-                onClick={() => this.showContainerLog(`${item.containerLog}user.pai.stdout`, 'Standard Output (Last 4096 bytes)')}
+                onClick={() =>
+                  this.showContainerLog(
+                    `${item.containerLog}user.pai.stdout`,
+                    'Standard Output (Last 4096 bytes)',
+                  )
+                }
                 disabled={isNil(item.containerId) || isNil(item.containerIp)}
               />
               <CommandBarButton
                 className={FontClassNames.mediumPlus}
                 styles={{
-                  root: {backgroundColor: 'transparent'},
-                  rootDisabled: {backgroundColor: 'transparent'},
+                  root: { backgroundColor: 'transparent' },
+                  rootDisabled: { backgroundColor: 'transparent' },
                 }}
-                iconProps={{iconName: 'Error'}}
+                iconProps={{ iconName: 'Error' }}
                 text='Stderr'
-                onClick={() => this.showContainerLog(`${item.containerLog}user.pai.stderr`, 'Standard Error (Last 4096 bytes)')}
+                onClick={() =>
+                  this.showContainerLog(
+                    `${item.containerLog}user.pai.stderr`,
+                    'Standard Error (Last 4096 bytes)',
+                  )
+                }
                 disabled={isNil(item.containerId) || isNil(item.containerIp)}
               />
               <CommandBarButton
                 className={FontClassNames.mediumPlus}
                 styles={{
-                  root: {backgroundColor: 'transparent'},
-                  rootDisabled: {backgroundColor: 'transparent'},
+                  root: { backgroundColor: 'transparent' },
+                  rootDisabled: { backgroundColor: 'transparent' },
                 }}
-                menuIconProps={{iconName: 'More'}}
+                menuIconProps={{ iconName: 'More' }}
                 menuProps={{
                   items: [
                     {
                       key: 'mergedLog',
                       name: 'Full log',
-                      iconProps: {iconName: 'TextDocument'},
+                      iconProps: { iconName: 'TextDocument' },
                       disabled: isNil(item.containerId),
-                      onClick: () => this.showContainerLog(`${item.containerLog}user.pai.all`, 'User logs (Last 4096 bytes)'),
+                      onClick: () =>
+                        this.showContainerLog(
+                          `${item.containerLog}user.pai.all`,
+                          'User logs (Last 4096 bytes)',
+                        ),
                     },
                     {
                       key: 'yarnTrackingPage',
                       name: 'Go to Tracking Page',
-                      iconProps: {iconName: 'Link'},
+                      iconProps: { iconName: 'Link' },
                       href: item.containerLog,
                       target: '_blank',
                     },
@@ -351,17 +435,27 @@ export default class TaskRoleContainerList extends React.Component {
   }
 
   onRenderRow(props) {
-    return <DetailsRow {...props} styles={{root: {
-      color: theme.palette.black,
-    }}}/>;
+    return (
+      <DetailsRow
+        {...props}
+        styles={{
+          root: {
+            color: theme.palette.black,
+          },
+        }}
+      />
+    );
   }
 
   render() {
-    const {monacoTitle, monacoProps, monacoFooterButton, logUrl} = this.state;
-    const {className, style, taskInfo} = this.props;
+    const { monacoTitle, monacoProps, monacoFooterButton, logUrl } = this.state;
+    const { className, style, taskInfo } = this.props;
     const status = taskInfo.taskStatuses;
     return (
-      <div className={className} style={{backgroundColor: theme.palette.white, ...style}}>
+      <div
+        className={className}
+        style={{ backgroundColor: theme.palette.white, ...style }}
+      >
         <ThemeProvider theme={theme}>
           <DetailsList
             columns={this.getColumns()}
@@ -373,7 +467,10 @@ export default class TaskRoleContainerList extends React.Component {
           />
         </ThemeProvider>
         {/* Timer */}
-        <Timer interval={isNil(monacoProps) || isEmpty(logUrl) ? null : interval} func={this.logAutoRefresh} />
+        <Timer
+          interval={isNil(monacoProps) || isEmpty(logUrl) ? null : interval}
+          func={this.logAutoRefresh}
+        />
         {/* Monaco Editor Panel */}
         <MonacoPanel
           isOpen={!isNil(monacoProps)}

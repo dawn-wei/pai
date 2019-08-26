@@ -24,32 +24,41 @@
  */
 
 import React from 'react';
-import {Text, Stack, FontWeights, Link} from 'office-ui-fabric-react';
+import { Text, Stack, FontWeights, Link } from 'office-ui-fabric-react';
 import PropTypes from 'prop-types';
 
-import {ExportConfig} from './export-config';
-import {ImportConfig} from './import-config';
+import { ExportConfig } from './export-config';
+import { ImportConfig } from './import-config';
 
-export const Topbar = React.memo(({jobData, jobProtocol, onChange, extras}) => {
-  return (
-    <Stack styles={{root: {height: '5%'}}} horizontal horizontalAlign='space-between' padding='l1 l2 l1 l2'>
-      <Stack horizontal gap='m' verticalAlign='baseline'>
-        <Text variant='xLarge' styles={{root: {fontWeight: 'semibold'}}}>
-          Job submission
-        </Text>
-        <Link
-          target='_blank'
-          href='https://github.com/microsoft/pai/blob/master/docs/user/job_submission.md'
-          style={{fontWeight: FontWeights.semibold}}
-        >{'Learn more >'}</Link>
+export const Topbar = React.memo(
+  ({ jobData, jobProtocol, onChange, extras }) => {
+    return (
+      <Stack
+        styles={{ root: { height: '5%' } }}
+        horizontal
+        horizontalAlign='space-between'
+        padding='l1 l2 l1 l2'
+      >
+        <Stack horizontal gap='m' verticalAlign='baseline'>
+          <Text variant='xLarge' styles={{ root: { fontWeight: 'semibold' } }}>
+            Job submission
+          </Text>
+          <Link
+            target='_blank'
+            href='https://github.com/microsoft/pai/blob/master/docs/user/job_submission.md'
+            style={{ fontWeight: FontWeights.semibold }}
+          >
+            {'Learn more >'}
+          </Link>
+        </Stack>
+        <Stack horizontal gap='s1'>
+          <ExportConfig jobData={jobData} jobProtocol={jobProtocol} />
+          <ImportConfig extras={extras} onChange={onChange} />
+        </Stack>
       </Stack>
-      <Stack horizontal gap='s1'>
-        <ExportConfig jobData={jobData} jobProtocol={jobProtocol}/>
-        <ImportConfig extras={extras} onChange={onChange}/>
-      </Stack>
-    </Stack>
-  );
-});
+    );
+  },
+);
 
 Topbar.propTypes = {
   jobData: PropTypes.object,

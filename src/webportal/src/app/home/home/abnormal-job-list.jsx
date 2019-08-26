@@ -27,26 +27,32 @@ import {
   getTheme,
 } from 'office-ui-fabric-react';
 import PropTypes from 'prop-types';
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Card from '../../components/card';
-import {getJobDurationString, getJobModifiedTimeString, getHumanizedJobStateString} from '../../components/util/job';
-import {zeroPaddingClass} from './util';
-import {Header} from './header';
+import {
+  getJobDurationString,
+  getJobModifiedTimeString,
+  getHumanizedJobStateString,
+  isLowGpuUsageJob,
+  isLongRunJob,
+} from '../../components/util/job';
+import { zeroPaddingClass } from './util';
+import { Header } from './header';
 import userAuth from '../../user/user-auth/user-auth.component';
-import {isLowGpuUsageJob, isLongRunJob} from '../../components/util/job';
-import {stopJob} from './conn';
-import {cloneDeep} from 'lodash';
+
+import { stopJob } from './conn';
+import { cloneDeep } from 'lodash';
 
 // Move it to common folder
-import {TooltipIcon} from '../../job-submission/components/controls/tooltip-icon';
+import { TooltipIcon } from '../../job-submission/components/controls/tooltip-icon';
 
 import t from '../../components/tachyons.scss';
 import StatusBadge from '../../components/status-badge';
 
-const {palette} = getTheme();
+const { palette } = getTheme();
 
-const AbnormalJobList = ({jobs}) => {
+const AbnormalJobList = ({ jobs }) => {
   const jobListColumns = [
     {
       key: 'name',
@@ -57,10 +63,11 @@ const AbnormalJobList = ({jobs}) => {
       headerClassName: FontClassNames.medium,
       isResizable: true,
       onRender(job) {
-        const {legacy, name, namespace, username} = job;
+        const { legacy, name, namespace, username } = job;
         const href = legacy
           ? `/job-detail.html?jobName=${name}`
-          : `/job-detail.html?username=${namespace || username}&jobName=${name}`;
+          : `/job-detail.html?username=${namespace ||
+              username}&jobName=${name}`;
         return <Link href={href}>{name}</Link>;
       },
     },
@@ -74,7 +81,11 @@ const AbnormalJobList = ({jobs}) => {
       isResizable: true,
       onRender(job) {
         if (isLowGpuUsageJob(job)) {
-          return (<div style={{color: palette.red}}>{`count: ${job.totalGpuNumber}  usage: ${job.gpuUsage}%`}</div>);
+          return (
+            <div
+              style={{ color: palette.red }}
+            >{`count: ${job.totalGpuNumber}  usage: ${job.gpuUsage}%`}</div>
+          );
         }
         return job.totalGpuNumber;
       },
@@ -108,7 +119,11 @@ const AbnormalJobList = ({jobs}) => {
       isResizable: true,
       onRender(job) {
         if (isLongRunJob(job)) {
-          return (<div style={{color: palette.red}}>{getJobDurationString(job)}</div>);
+          return (
+            <div style={{ color: palette.red }}>
+              {getJobDurationString(job)}
+            </div>
+          );
         }
         return getJobDurationString(job);
       },
@@ -151,15 +166,15 @@ const AbnormalJobList = ({jobs}) => {
             data-selection-disabled
           >
             <DefaultButton
-              iconProps={{iconName: 'StopSolid'}}
+              iconProps={{ iconName: 'StopSolid' }}
               styles={{
-                root: {backgroundColor: '#e5e5e5'},
-                rootFocused: {backgroundColor: '#e5e5e5'},
-                rootDisabled: {backgroundColor: '#eeeeee'},
-                rootCheckedDisabled: {backgroundColor: '#eeeeee'},
-                icon: {fontSize: 12},
+                root: { backgroundColor: '#e5e5e5' },
+                rootFocused: { backgroundColor: '#e5e5e5' },
+                rootDisabled: { backgroundColor: '#eeeeee' },
+                rootCheckedDisabled: { backgroundColor: '#eeeeee' },
+                icon: { fontSize: 12 },
               }}
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 stopAbnormalJob(job);
               }}
@@ -172,39 +187,50 @@ const AbnormalJobList = ({jobs}) => {
     },
   ];
 
-  const stopAbnormalJob = useCallback((job) => {
-    userAuth.checkToken(() => {
-      stopJob(job).then(() => {
-        const cloneJobs = cloneDeep(abnormalJobs);
-        cloneJobs.executionType = 'STOP';
-        setAbnormalJobs(cloneJobs);
-      }).catch(alert);
-    });
-  }, [abnormalJobs]);
+  const stopAbnormalJob = useCallback(
+    job => {
+      userAuth.checkToken(() => {
+        stopJob(job)
+          .then(() => {
+            const cloneJobs = cloneDeep(abnormalJobs);
+            cloneJobs.executionType = 'STOP';
+            setAbnormalJobs(cloneJobs);
+          })
+          .catch(alert);
+      });
+    },
+    [abnormalJobs],
+  );
 
   const [abnormalJobs, setAbnormalJobs] = useState(jobs);
 
   return (
     <Card className={c(t.h100, t.ph5)}>
-      <Stack gap='l1' styles={{root: [t.h100]}}>
+      <Stack gap='l1' styles={{ root: [t.h100] }}>
         <Stack.Item>
           <Header
             headerName='Abnormal jobs'
             linkName='All jobs'
             linkHref='/job-list.html'
-            showLink={true}>{
-                <TooltipIcon content={'A job is treaded as an abnormal job if running more than 5 days and GPU usage is lower than 10%'}/>
-              }
-            </Header>
+            showLink={true}
+          >
+            {
+              <TooltipIcon
+                content={
+                  'A job is treaded as an abnormal job if running more than 5 days and GPU usage is lower than 10%'
+                }
+              />
+            }
+          </Header>
         </Stack.Item>
-        <Stack.Item styles={{root: {overflow: 'auto'}}} grow>
+        <Stack.Item styles={{ root: { overflow: 'auto' } }} grow>
           <DetailsList
             columns={jobListColumns}
             disableSelectionZone
             items={abnormalJobs}
             layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.none}
-            />
+          />
         </Stack.Item>
       </Stack>
     </Card>
