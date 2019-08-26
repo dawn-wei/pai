@@ -44,7 +44,7 @@ renderer.link = (href, title, text) => {
     return href;
   }
   if (href[0] !== '#') {
-    href = url.resolve(baseUrl, href);
+    href = url.resolve(baseUrl, href); // eslint-disable-line node/no-deprecated-api
   }
   let out = '<a href="' + href + '"';
   if (title) {
