@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: ['eslint-plugin-prettier'],
+  plugins: ['eslint-plugin-prettier', 'react-hooks'],
   env: {
     browser: true,
     es6: true,
@@ -31,6 +31,8 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     'react/display-name': 'off',
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     'max-len': [
       'error',
       {

@@ -32,10 +32,13 @@ import t from 'tachyons-sass/tachyons.scss';
 const LoginModal = ({ isOpen, lock, error, onDismiss, onLogin }) => {
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
-  const onSubmit = useCallback(e => {
-    e.preventDefault();
-    onLogin(usernameRef.current.value, passwordRef.current.value);
-  }, []);
+  const onSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      onLogin(usernameRef.current.value, passwordRef.current.value);
+    },
+    [onLogin],
+  );
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <div className={c(t.pa5)} style={{ width: '24rem' }}>

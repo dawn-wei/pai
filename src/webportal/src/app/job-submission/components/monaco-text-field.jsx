@@ -59,7 +59,7 @@ export const MonacoTextFiled = props => {
       }
       debouncedOnChange(val);
     },
-    [debouncedOnChange],
+    [debouncedOnChange, placeholder],
   );
 
   const monacoProps = { ...rawMonacoProps };
@@ -88,7 +88,7 @@ export const MonacoTextFiled = props => {
         rawEditorDidMount(editor, monaco);
       }
     },
-    [rawEditorDidMount],
+    [rawEditorDidMount, placeholder],
   );
 
   return (

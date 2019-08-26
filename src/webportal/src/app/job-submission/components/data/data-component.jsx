@@ -65,7 +65,7 @@ export const DataComponent = React.memo(props => {
     port,
     apiPath,
   );
-  const { onChange } = props;
+  const { jobName, onChange } = props;
   const [teamConfigs, setTeamConfigs] = useState();
   const [defaultTeamConfigs, setDefaultTeamConfigs] = useState();
   const [dataError, setDataError] = useState({
@@ -75,6 +75,13 @@ export const DataComponent = React.memo(props => {
   const [jobData, dispatch] = useReducer(
     reducer,
     new JobData(hdfsClient, [], null),
+  );
+
+  const onMountDirChange = useCallback(
+    mountDir => {
+      dispatch({ type: 'mountDir', value: mountDir, onChange: onChange });
+    },
+    [onChange],
   );
 
   useEffect(() => {
@@ -121,7 +128,7 @@ export const DataComponent = React.memo(props => {
         }
         const mountDirectories = new MountDirectories(
           user,
-          props.jobName,
+          jobName,
           defaultConfigs,
           servers,
         );
@@ -133,18 +140,11 @@ export const DataComponent = React.memo(props => {
         setDefaultTeamConfigs(null);
         setTeamConfigs(null);
       });
-  }, []);
+  }, [onMountDirChange, jobName]);
 
   const _onDataListChange = useCallback(
     dataList => {
       dispatch({ type: 'dataList', value: dataList, onChange: onChange });
-    },
-    [onChange],
-  );
-
-  const onMountDirChange = useCallback(
-    mountDir => {
-      dispatch({ type: 'mountDir', value: mountDir, onChange: onChange });
     },
     [onChange],
   );

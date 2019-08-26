@@ -112,7 +112,16 @@ export const KeyValueList = ({
     }
     setErrorMessage(msgId, errorMessage);
     setDupList(newDupList);
-  }, [value]);
+  }, [
+    value,
+    keyField,
+    name,
+    onError,
+    onValidateKey,
+    onValidateValue,
+    setErrorMessage,
+    valueField,
+  ]);
 
   const onAdd = useCallback(() => {
     onChange([...value, { [keyField]: '', [valueField]: '' }]);

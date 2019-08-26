@@ -88,7 +88,7 @@ const Home = () => {
     } else {
       // layout.component.js will redirect user to index page.
     }
-  }, []);
+  }, [isAdmin]);
 
   if (loading) {
     return <SpinnerLoading />;

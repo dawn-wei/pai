@@ -46,7 +46,7 @@ async function fetchWrapper(...args) {
 }
 
 export async function submitJob(jobProtocol) {
-  return await fetchWrapper(`${config.restServerUri}/api/v2/jobs`, {
+  return fetchWrapper(`${config.restServerUri}/api/v2/jobs`, {
     body: jobProtocol,
     headers: {
       Authorization: `Bearer ${token}`,

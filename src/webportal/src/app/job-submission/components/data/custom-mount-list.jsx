@@ -91,7 +91,7 @@ export const MountList = ({ dataList, setDataList, setDataError }) => {
       dataSourceErrorMessage,
       setDataSourceErrorMessage,
     );
-  }, [dataList]);
+  }, [dataList, containerPathErrorMessage, dataSourceErrorMessage]);
 
   useEffect(() => {
     if (
@@ -122,17 +122,28 @@ export const MountList = ({ dataList, setDataList, setDataError }) => {
         ),
       });
     }
-  }, [containerPathErrorMessage, dataSourceErrorMessage]);
+  }, [
+    containerPathErrorMessage,
+    dataSourceErrorMessage,
+    setDataError,
+    setErrorMessage,
+  ]);
 
-  const onRemove = useCallback(idx => {
-    setDataList([...dataList.slice(0, idx), ...dataList.slice(idx + 1)]);
-  });
+  const onRemove = useCallback(
+    idx => {
+      setDataList([...dataList.slice(0, idx), ...dataList.slice(idx + 1)]);
+    },
+    [dataList, setDataList],
+  );
 
-  const onDataSourceChange = useCallback((idx, val) => {
-    const updatedDataList = cloneDeep(dataList);
-    updatedDataList[idx].dataSource = val;
-    setDataList(updatedDataList);
-  });
+  const onDataSourceChange = useCallback(
+    (idx, val) => {
+      const updatedDataList = cloneDeep(dataList);
+      updatedDataList[idx].dataSource = val;
+      setDataList(updatedDataList);
+    },
+    [dataList, setDataList],
+  );
   const columes = [
     {
       key: 'containerPath',

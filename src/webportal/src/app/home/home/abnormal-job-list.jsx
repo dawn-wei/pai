@@ -53,6 +53,7 @@ import StatusBadge from '../../components/status-badge';
 const { palette } = getTheme();
 
 const AbnormalJobList = ({ jobs }) => {
+  const [abnormalJobs, setAbnormalJobs] = useState(jobs);
   const jobListColumns = [
     {
       key: 'name',
@@ -201,8 +202,6 @@ const AbnormalJobList = ({ jobs }) => {
     },
     [abnormalJobs],
   );
-
-  const [abnormalJobs, setAbnormalJobs] = useState(jobs);
 
   return (
     <Card className={c(t.h100, t.ph5)}>

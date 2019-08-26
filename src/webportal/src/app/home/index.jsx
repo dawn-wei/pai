@@ -26,7 +26,6 @@ import { initializeIcons } from 'office-ui-fabric-react';
 import querystring from 'querystring';
 import React, { useState, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import url from 'url';
 
 import Bottom from './index/bottom';
 import { login } from './index/conn';
@@ -38,14 +37,13 @@ import t from 'tachyons-sass/tachyons.scss';
 
 let loginTarget = '/home.html';
 
-const currentUrl = new URL(window.location.href);
-const from = currentUrl.searchParams.get('from');
+const query = new URLSearchParams(window.location.search);
+const from = query.get('from');
 if (!isEmpty(from)) {
   loginTarget = from;
 }
 
 if (config.authnMethod === 'OIDC') {
-  const query = url.parse(window.location.href, true).query;
   const expiration = 7;
   if (query.token) {
     cookies.set('user', query.user, { expires: expiration });

@@ -145,7 +145,7 @@ $(document).ready(() => {
   userAuth.checkToken(function(token) {
     loadEditor();
     editor.on('change', () => {
-      $('#submitJob').prop('disabled', editor.validate().length != 0);
+      $('#submitJob').prop('disabled', editor.validate().length !== 0);
     });
 
     // choose the first edit json box
@@ -208,7 +208,7 @@ $(document).ready(() => {
     if (op === 'resubmit') {
       if (type != null && username != null && jobname != null) {
         const url =
-          username == ''
+          username === ''
             ? `${webportalConfig.restServerUri}/api/v1/jobs/${jobname}/config`
             : `${webportalConfig.restServerUri}/api/v2/jobs/${username}~${jobname}/config`;
         $.ajax({

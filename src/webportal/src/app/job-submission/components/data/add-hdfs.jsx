@@ -48,7 +48,7 @@ export const AddHDFS = ({
         }
       });
     }
-  }, []);
+  }, [hdfsClient]);
 
   const submitMount = async () => {
     if (hdfsClient) {

@@ -90,7 +90,7 @@ export default function JobList() {
       filter.load();
       return filter;
     }
-  });
+  }, [admin, username]);
   const [filter, setFilter] = useState(initialFilter);
   const [ordering, setOrdering] = useState(new Ordering());
   const [pagination, setPagination] = useState(new Pagination());
@@ -114,7 +114,7 @@ export default function JobList() {
 
   useEffect(() => {
     setPagination(new Pagination(pagination.itemsPerPage, 0));
-  }, [filteredJobs]);
+  }, [filteredJobs, pagination]);
 
   const stopJob = useCallback(
     (...jobs) => {

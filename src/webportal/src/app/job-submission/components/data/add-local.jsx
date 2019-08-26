@@ -43,7 +43,7 @@ export const AddLocal = ({
         }
       });
     }
-  }, []);
+  }, [hdfsClient]);
 
   const getUploadText = () => {
     if (files === undefined) {
@@ -63,7 +63,7 @@ export const AddLocal = ({
   };
   const submitMount = () => {
     const newMountList = cloneDeep(dataList);
-    const dataSource = files.map(file => file.name).join(', '); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const dataSource = files.map(file => file.name).join(', ');
     const uploadFiles = files;
     newMountList.push(
       new InputData(mountPath, dataSource, 'local', uploadFiles),

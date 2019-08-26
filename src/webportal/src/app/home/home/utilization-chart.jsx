@@ -25,8 +25,9 @@ import React, { useEffect, useRef } from 'react';
 import './c3.scss';
 import t from '../../components/tachyons.scss';
 
+const { palette } = getTheme();
+
 export const UtilizationChart = ({ percentage }) => {
-  const { palette } = getTheme();
   const chartRef = useRef(null);
 
   let usageColor = palette.green;
@@ -77,7 +78,7 @@ export const UtilizationChart = ({ percentage }) => {
       },
     });
     chart.resize();
-  }, []);
+  }, [percentage, usageColor]);
 
   return (
     <Stack styles={{ root: [t.relative] }} grow>

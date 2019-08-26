@@ -58,7 +58,7 @@ export const CSpinButton = props => {
       }
       return onChange(newValue);
     },
-    [onChange],
+    [onChange, max, min],
   );
 
   const _onIncrement = value => _onChange(value, onIncrement, +value + 1);

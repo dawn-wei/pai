@@ -218,7 +218,7 @@ export const JobSubmissionPage = ({ isSingle, setWizardStatus, yamlText }) => {
     if (isUpdated) {
       setSecrets(updatedSecrets);
     }
-  }, [jobTaskRoles]);
+  }, [jobTaskRoles, setSecrets, secrets]);
 
   // fill protocol if cloned job
   useEffect(() => {
@@ -252,7 +252,7 @@ export const JobSubmissionPage = ({ isSingle, setWizardStatus, yamlText }) => {
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [setJobTaskRoles, setParameters, vcNames]);
 
   // update component if yamlText is not null
   useEffect(() => {
@@ -286,7 +286,7 @@ export const JobSubmissionPage = ({ isSingle, setWizardStatus, yamlText }) => {
       setExtras(updatedExtras);
       setJobProtocol(updatedJob);
     }
-  }, []);
+  }, [extras, setParameters, setSecrets, vcNames, yamlText]);
 
   useEffect(() => {
     const taskRolesManager = new TaskRolesManager(jobTaskRoles);
@@ -297,7 +297,7 @@ export const JobSubmissionPage = ({ isSingle, setWizardStatus, yamlText }) => {
       taskRolesManager.populateTaskRolesDockerInfo();
       setJobTaskRoles(jobTaskRoles);
     }
-  }, [secrets]);
+  }, [secrets, jobTaskRoles, setJobTaskRoles]);
 
   useEffect(() => {
     listUserVirtualClusters(loginUser)

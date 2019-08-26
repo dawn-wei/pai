@@ -57,7 +57,7 @@ export default function Table() {
         if (errorMessage) {
           return errorMessage;
         }
-        if (allUsers.indexOf(value) != -1) {
+        if (allUsers.indexOf(value) !== -1) {
           return 'User name already exists';
         }
         return '';
@@ -211,7 +211,7 @@ export default function Table() {
             }
           }}
           onRenderTitle={_options => {
-            if (userInfo.vcs.length == 0) {
+            if (userInfo.vcs.length === 0) {
               return null;
             } else {
               let innerText = userInfo.vcs[0];

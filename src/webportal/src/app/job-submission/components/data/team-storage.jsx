@@ -87,7 +87,7 @@ export const TeamStorage = ({
     const newMountDirs = cloneDeep(mountDirs);
     newMountDirs.selectedConfigs = selectedConfigs;
     onMountDirChange(newMountDirs);
-  }, [selectedConfigNames]);
+  }, [selectedConfigNames, mountDirs, onMountDirChange, teamConfigs]);
 
   const columes = [
     {

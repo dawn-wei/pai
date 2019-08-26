@@ -116,7 +116,7 @@ function TopBar() {
       .catch(err => {
         alert(err.message);
       });
-  }, []);
+  }, [filter, setFilter]);
 
   /**
    * @returns {import('office-ui-fabric-react').ICommandBarItemProps}

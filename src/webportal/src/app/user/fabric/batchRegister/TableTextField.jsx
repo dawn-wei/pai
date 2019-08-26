@@ -15,7 +15,7 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { PropTypes } from 'prop-types';
 import {
   TextField,
@@ -57,15 +57,18 @@ export default function TableTextField(props) {
     });
   }
 
-  const _getErrorMessage = value => {
-    if (!readOnly) {
-      setCustomErrorMessage(onGetErrorMessage(value));
-    }
-  };
+  const _getErrorMessage = useCallback(
+    value => {
+      if (!readOnly) {
+        setCustomErrorMessage(onGetErrorMessage(value));
+      }
+    },
+    [setCustomErrorMessage, onGetErrorMessage, readOnly],
+  );
 
   useEffect(() => {
     _getErrorMessage(defaultValue);
-  }, [defaultValue, allUsers]);
+  }, [defaultValue, allUsers, _getErrorMessage]);
 
   return (
     <Stack horizontal>

@@ -42,9 +42,10 @@ import {
   BREAKPOINT2,
 } from './util';
 
+const { palette, spacing } = getTheme();
+
 const GpuChart = ({ style, gpuPerNode, virtualClusters, userInfo }) => {
   const chartRef = useRef(null);
-  const { palette, spacing } = getTheme();
 
   const hasDedicatedVC = useMemo(() => {
     return Object.entries(virtualClusters)

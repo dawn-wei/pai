@@ -63,7 +63,7 @@ export default function Table() {
         setSelectedJobs(selection.getSelection());
       },
     });
-  }, []);
+  }, [setSelectedJobs]);
 
   /**
    * @param {React.MouseEvent<HTMLElement>} event

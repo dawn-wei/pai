@@ -63,7 +63,7 @@ export default function UserEditor({
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     setIsAdmin(oldAdmin);
-  }, []);
+  }, [oldAdmin]);
 
   const handleAdminChanged = (_event, checked) => {
     setIsAdmin(checked);
@@ -72,7 +72,7 @@ export default function UserEditor({
   const [vcs, setVcs] = useState([]);
   useEffect(() => {
     setVcs(virtualCluster.slice());
-  }, []);
+  }, [virtualCluster]);
 
   const handleVCsChanged = (_event, option, _index) => {
     if (option.selected) {
@@ -143,7 +143,7 @@ export default function UserEditor({
         return;
       }
     } else {
-      if (newEmail != email) {
+      if (newEmail !== email) {
         const result = await updateUserEmailRequest(newUsername, newEmail)
           .then(() => {
             setNeedRefreshAllUsers(true);
@@ -175,7 +175,7 @@ export default function UserEditor({
         }
       }
 
-      if (newAdmin != oldAdmin) {
+      if (newAdmin !== oldAdmin) {
         const result = await updateUserAdminRequest(newUsername, newAdmin)
           .then(() => {
             setNeedRefreshAllUsers(true);

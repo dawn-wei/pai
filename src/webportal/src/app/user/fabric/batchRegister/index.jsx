@@ -125,7 +125,7 @@ export default function BatchRegister() {
       );
       return false;
     }
-    if (csvResult.data.length == 0) {
+    if (csvResult.data.length === 0) {
       showMessageBox('Empty CSV file');
       return false;
     }
@@ -140,7 +140,7 @@ export default function BatchRegister() {
         for (let j = 0; j < parsedVCs.length; j++) {
           const vc = parsedVCs[j];
           if (vc) {
-            if (virtualClusters.indexOf(vc) == -1) {
+            if (virtualClusters.indexOf(vc) === -1) {
               showMessageBox(`${vc} is not a valid virtual cluster name`);
               return false;
             }
@@ -293,7 +293,7 @@ export default function BatchRegister() {
     onClose: null,
   });
   const showMessageBox = value => {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve, reject) => {
       setMessageBox({ text: String(value), onClose: resolve });
     });
   };
@@ -317,8 +317,10 @@ export default function BatchRegister() {
 
   const hideSubmit =
     findIndex(userInfos, userInfo => {
-      return userInfo.status == undefined || userInfo.status.isSuccess == false;
-    }) == -1;
+      return (
+        userInfo.status === undefined || userInfo.status.isSuccess === false
+      );
+    }) === -1;
 
   const { spacing } = getTheme();
 

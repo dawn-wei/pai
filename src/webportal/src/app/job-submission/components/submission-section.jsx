@@ -25,7 +25,13 @@
 
 import PropTypes from 'prop-types';
 import { isNil, debounce, isEqual, isEmpty, cloneDeep } from 'lodash';
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useCallback,
+} from 'react';
 import {
   Stack,
   DefaultButton,
@@ -82,16 +88,19 @@ export const SubmissionSection = props => {
 
   const { vcNames, errorMessages, setErrorMessage } = useContext(Context);
 
-  const _protocolAndErrorUpdate = protocol => {
-    if (!isEqual(jobProtocol, protocol)) {
-      setJobProtocol(protocol);
-    }
-    const newValidationMessage = JobProtocol.validateFromObject(protocol);
-    if (newValidationMessage !== validationMsg) {
-      setValidationMsg(newValidationMessage);
-    }
-    setErrorMessage(VALIDATION_ERROR_MESSAGE_ID, newValidationMessage);
-  };
+  const _protocolAndErrorUpdate = useCallback(
+    protocol => {
+      if (!isEqual(jobProtocol, protocol)) {
+        setJobProtocol(protocol);
+      }
+      const newValidationMessage = JobProtocol.validateFromObject(protocol);
+      if (newValidationMessage !== validationMsg) {
+        setValidationMsg(newValidationMessage);
+      }
+      setErrorMessage(VALIDATION_ERROR_MESSAGE_ID, newValidationMessage);
+    },
+    [jobProtocol, setJobProtocol, setErrorMessage, validationMsg],
+  );
 
   useEffect(() => {
     const protocol = jobProtocol.getUpdatedProtocol(
@@ -102,7 +111,15 @@ export const SubmissionSection = props => {
       extras,
     );
     _protocolAndErrorUpdate(protocol);
-  }, [jobInformation, jobTaskRoles, parameters, secrets, jobProtocol, extras]);
+  }, [
+    jobInformation,
+    jobTaskRoles,
+    parameters,
+    secrets,
+    jobProtocol,
+    extras,
+    _protocolAndErrorUpdate,
+  ]);
 
   const _openEditor = async event => {
     event.preventDefault();

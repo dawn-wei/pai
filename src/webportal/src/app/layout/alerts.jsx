@@ -64,7 +64,7 @@ export const NotificationButton = () => {
   }, []);
   const close = useCallback(() => {
     setPanelOpened(false);
-  }, [setAlertItems]);
+  }, [setPanelOpened]);
 
   const renderNavigationContent = useCallback((props, defaultRender) => {
     return (

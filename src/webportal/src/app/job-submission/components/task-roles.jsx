@@ -86,7 +86,7 @@ export const TaskRoles = React.memo(
       } else {
         setErrorMessage('TaskRole', '');
       }
-    }, [taskRoles]);
+    }, [items, setErrorMessage]);
 
     return (
       <TabForm

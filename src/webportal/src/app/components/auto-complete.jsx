@@ -70,13 +70,13 @@ export const AutoComplete = ({
     if (suggested >= suggestions.length) {
       setSuggested(Math.max(0, suggestions.length - 1));
     }
-  }, [value, items, showAllSuggestions]);
+  }, [value, items, showAllSuggestions, suggested]);
   // event handler
   const onTextChange = useCallback(
     (e, newValue) => {
       onChange(newValue || '');
     },
-    [items, onChange],
+    [onChange],
   );
 
   const onFocus = useCallback(() => setFocused(true), []);

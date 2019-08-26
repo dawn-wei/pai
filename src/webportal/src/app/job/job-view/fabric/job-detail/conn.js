@@ -114,7 +114,7 @@ export function getTensorBoardUrl(jobInfo, rawJobConfig) {
       if (
         taskStatuses.taskState === 'RUNNING' &&
         taskStatuses.containerPorts &&
-        taskStatuses.containerPorts.hasOwnProperty(tensorBoardPortStr)
+        !isNil(taskStatuses.containerPorts[tensorBoardPortStr])
       ) {
         port = taskStatuses.containerPorts[tensorBoardPortStr];
         ip = taskStatuses.containerIp;
