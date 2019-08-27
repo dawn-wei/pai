@@ -77,6 +77,7 @@ export const DataComponent = React.memo(props => {
     new JobData(hdfsClient, [], null),
   );
 
+  console.log('data')
   const onMountDirChange = useCallback(
     mountDir => {
       dispatch({ type: 'mountDir', value: mountDir, onChange: onChange });

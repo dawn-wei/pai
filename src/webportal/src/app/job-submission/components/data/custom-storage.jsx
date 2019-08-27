@@ -9,6 +9,7 @@ import { InputData } from '../../models/data/input-data';
 
 const { spacing } = getTheme();
 export const CustomStorage = ({ dataList, setDataList, setDataError }) => {
+  console.log('custom');
   return (
     <div>
       <div

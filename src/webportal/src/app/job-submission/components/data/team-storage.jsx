@@ -76,6 +76,7 @@ export const TeamStorage = ({
   const hideTeamDetail = () => {
     setTeamDetail({ isOpen: false });
   };
+  console.log('team');
 
   useEffect(() => {
     let selectedConfigs = [];
@@ -87,7 +88,7 @@ export const TeamStorage = ({
     const newMountDirs = cloneDeep(mountDirs);
     newMountDirs.selectedConfigs = selectedConfigs;
     onMountDirChange(newMountDirs);
-  }, [selectedConfigNames, mountDirs, onMountDirChange, teamConfigs]);
+  }, [selectedConfigNames, onMountDirChange, teamConfigs]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const columes = [
     {

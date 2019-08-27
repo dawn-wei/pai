@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import c from 'classnames';
-import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import { PrimaryButton } from 'office-ui-fabric-react';
 import PropTypes from 'prop-types';
 
 import { AddHttp } from './add-http';
@@ -12,8 +12,7 @@ import { HdfsContext } from '../../models/data/hdfs-context';
 
 import t from '../../../../app/components/tachyons.scss';
 
-export const AddDataSource = props => {
-  const { dataList, setDataList } = props;
+export const AddDataSource = ({ dataList, setDataList }) => {
   const [dataType, setDataType] = useState();
 
   const menuItems = [
