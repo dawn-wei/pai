@@ -414,7 +414,7 @@ export default class TaskRoleContainerList extends React.Component {
                   items: [
                     {
                       key: 'mergedLog',
-                      name: 'Full log',
+                      name: 'Stdout+Stderr',
                       iconProps: {iconName: 'TextDocument'},
                       disabled: isNil(item.containerId),
                       onClick: () => this.showContainerLog(
@@ -422,8 +422,8 @@ export default class TaskRoleContainerList extends React.Component {
                         'User logs (Last 4096 bytes. Notice: The logs may out of order when merging stdout & stderr streams)'),
                     },
                     {
-                      key: 'yarnTrackingPage',
-                      name: 'Go to Tracking Page',
+                      key: 'trackingPage',
+                      name: config.launcherType === 'yarn' ? 'Go to Yarn Tracking Page': 'Browse log folder',
                       iconProps: {iconName: 'Link'},
                       href: item.containerLog,
                       target: '_blank',
