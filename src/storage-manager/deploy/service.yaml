@@ -16,6 +16,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 cluster-type:
+  - yarn
   - k8s
 
 prerequisite:
@@ -31,4 +32,4 @@ refresh-script: refresh.sh
 upgraded-script: upgraded.sh
 
 deploy-rules:
-  - in: pai-storage
+  - in: pai-master

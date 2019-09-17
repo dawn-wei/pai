@@ -33,7 +33,8 @@ RUN apt-get -y update && \
       cifs-utils \
       nfs-common \
       netbase \
-      nfs-kernel-server
+      nfs-kernel-server \
+      kmod
 
 ENV SHARE_ROOT=/share/pai
 
