@@ -52,6 +52,9 @@ spec:
         volumeMounts:
         - name: pai-storage
           mountPath: /share/pai
+        - name: host-modules
+          mountPath: /lib/modules
+          readOnly: true
         ports:
         - containerPort: 445
           hostPort: {{ cluster_cfg["storage-manager"]["smbport"] }}
@@ -63,6 +66,9 @@ spec:
         - name: pai-storage
           hostPath:
             path: {{ cluster_cfg["storage-manager"]["localpath"] }}
+        - name: host-modules
+          hostPath:
+            path: /lib/modules
       imagePullSecrets:
       - name: {{ cluster_cfg["cluster"]["docker-registry"]["secret-name"] }}
       tolerations:
