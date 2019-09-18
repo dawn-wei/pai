@@ -54,6 +54,8 @@ spec:
         volumeMounts:
         - name: pai-storage
           mountPath: /share/pai
+        - name: pai-config
+          mountPath: /etc/pai-config
         - name: host-modules
           mountPath: /lib/modules
           readOnly: true
@@ -71,6 +73,9 @@ spec:
         - name: host-modules
           hostPath:
             path: /lib/modules
+        - name: pai-config
+          configMap:
+            name: pai-configuration
       imagePullSecrets:
       - name: {{ cluster_cfg["cluster"]["docker-registry"]["secret-name"] }}
       tolerations:
