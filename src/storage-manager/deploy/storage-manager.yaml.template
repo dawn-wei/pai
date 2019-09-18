@@ -38,6 +38,8 @@ spec:
       - name: storage-manager
         image: {{ cluster_cfg["cluster"]["docker-registry"]["prefix"] }}storage-manager:{{ cluster_cfg["cluster"]["docker-registry"]["tag"] }}
         imagePullPolicy: Always
+        securityContext:
+          privileged: True
         env:
         - name: DOMAIN
           value: {{ cluster_cfg['storage-manager']['domain'] }}
